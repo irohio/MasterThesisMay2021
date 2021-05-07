@@ -1,2 +1,2 @@
 # MasterThesisMay2021
-Low power aware object classification on arm-based microcontroller using deep neural network
+Low Power Aware Object Classification on Edge Based TPU Using Deep Neural Network
