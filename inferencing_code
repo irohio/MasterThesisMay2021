@@ -1,0 +1,18 @@
+python3 detect_image_modified.py --model tf1_output/ssd_mobileDet_gpu25_edgetpu.tflite --labels training/labels.txt --input check18.jpeg --output check18_result.jpeg
+
+
+
+------------------------------------------------
+
+Reference 
+
+@Online{Coral2020,
+  author  = {Google Coral},
+  month   = {December},
+  title   = {retrain-detection},
+  url     = {https://coral.ai/docs/edgetpu/retrain-detection/},
+  urldate = {2020-12-05},
+  version = {1},
+  year    = {2020},
+}
+

@@ -1,0 +1,133 @@
+!pip install --upgrade pip
+!pip install --upgrade protobuf
+
+
+
+-------------------------------------
+
+%tensorflow_version 1.15
+#%tensorflow_version 2.4
+!pip install tensorflow-gpu==1.15.0
+#!pip install tensorflow-gpu==2.0.0
+#!pip install tensorflow-gpu==2.2.0 
+#!pip install tensorflow-gpu==2.4.0
+import tensorflow as tf
+print(tf.__version__)
+!pip install numpy
+
+
+----------------------------------------
+
+
+device_name = tf.test.gpu_device_name()
+if device_name != '/device:GPU:0':
+  raise SystemError("GPU device not found")
+print('Found GPU at {}'.format(device_name))
+
+
+---------------------------------------------
+
+
+# memory footprint support libraries/code
+!ln -sf /opt/bin/nvidia-smi /usr/bin/nvidia-smi
+!pip install gputil
+!pip install psutil
+!pip install humanize
+import psutil
+import humanize
+import os
+import GPUtil as GPU
+GPUs = GPU.getGPUs()
+# XXX: only one GPU on Colab and isn’t guaranteed
+gpu = GPUs[0]
+def printm():
+  process = psutil.Process(os.getpid())
+  print("Gen RAM Free: " + humanize.naturalsize( psutil.virtual_memory().available ), " | Proc size: " + humanize.naturalsize( process.memory_info().rss))
+  print("GPU RAM Free: {0:.0f}MB | Used: {1:.0f}MB | Util {2:3.0f}% | Total {3:.0f}MB".format(gpu.memoryFree, gpu.memoryUsed, gpu.memoryUtil*100, gpu.memoryTotal))
+printm()
+
+-----------------------------------------------
+
+from google.colab import drive
+drive.mount('/content/gdrive')
+
+# change to working tensorflow directory on the drive
+%cd '/content/gdrive/My Drive/models/'
+
+
+
+------------------------------------------------------
+
+
+
+
+!apt-get install protobuf-compiler python-pil python-lxml python-tk
+!pip install Cython
+%cd /content/gdrive/My Drive/models/research/
+!protoc object_detection/protos/*.proto --python_out=.
+
+import os
+os.environ['PYTHONPATH'] += ':/content/gdrive/My Drive/models/research/:/content/gdrive/My Drive/Tensorflow/models/research/slim'
+
+!python setup.py build
+!python setup.py install
+
+
+
+------------------------------------------------------
+
+
+import time, psutil
+Start = time.time()- psutil.boot_time()
+Left= 12*3600 - Start
+print('Time remaining for this session is: ', Left/3600)
+
+
+
+--------------------------------------------------------------
+
+
+!pip install tf_slim
+import os
+%cd /content/gdrive/My Drive/models/research/object_detection
+os.environ['PYTHONPATH'] += ':/content/gdrive/My Drive/models/research/:/content/gdrive/My Drive/Tensorflow/models/research/slim'
+
+#!python train.py --logtostderr --train_dir=training/ --pipeline_config_path=ssd_mobilenet_v1_quantized/pipeline.config
+
+#!pip3 install tensorflow_estimator
+#!pythontrain.py --model_dir_dir=training/ --pipeline_config_path=ssd_mobilenet_v1_quantized2/pipeline.config --num_train_steps=25000 --num_eval_steps=500
+!python model_main.py --model_dir=training/ --pipeline_config_path=edgetpu-ssdlite-mobiledet-retrain-master/pipeline.config --logtostderr --num_train_steps=25000 --num_val_steps=1000
+# This should be run if there is non module named official
+#!pip install tf-models-official
+#!pip install lvis
+
+
+------------------------------------------------------------------------------------
+
+
+Reference:https://github.com/Bengemon825/TF_Object_Detection2020
+
+@Online{LazyTech2020,
+  author  = {Bengemon825},
+  month   = {December},
+  title   = {How to Train a Custom Model for Object Detection (Local and Google Colab!)},
+  url     = {https://www.youtube.com/watch?v=_gGI91BmIdk},
+  urldate = {2021-03-15},
+  version = {1},
+  year    = {2020},
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

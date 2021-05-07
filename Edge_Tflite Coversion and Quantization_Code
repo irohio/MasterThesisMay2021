@@ -1,0 +1,42 @@
+
+
+python export_tflite_ssd_graph.py --pipeline_config_path="edgetpu-ssdlite-mobiledet-retrain-master/pipeline.config" --trained_checkpoint_prefix="training/model.ckpt-25000" --output_directory="tf1_output/" --add_postprocessing_op=true
+
+
+---------------------------------------------------
+
+tflite_convert --output_file="tf1_output/output_tflite_graph.tflite" --graph_def_file="tf1_output/tflite_graph.pb" --inference_type=QUANTIZED_UINT8 --input_arrays="normalized_input_image_tensor" --output_arrays="TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3" --mean_values=128 --std_dev_values=128 --input_shapes=1,300,300,3 --change_concat_input_ranges=false --allow_nudging_weights_to_use_fast_gemm_kernel=true --allow_custom_op
+
+
+---------------------------------------------------
+
+
+edgetpu_compiler output_tflite_graph.tflite
+
+
+----------------------------------------------------
+
+
+mv output_tflite_graph_edgetpu.tflite ssd_mobileDet_v2_gpu48_edgetpu.tflite
+
+
+
+-----------------------------------------------------
+
+Reference:
+
+@Online{Coral2020,
+  author  = {Google Coral},
+  month   = {December},
+  title   = {retrain-detection},
+  url     = {https://coral.ai/docs/edgetpu/retrain-detection/},
+  urldate = {2020-12-05},
+  version = {1},
+  year    = {2020},
+}
+
+
+
+
+
+
